@@ -42,49 +42,54 @@ void main() {
             for (i = 0; i < 1000; i++);
             PORTBbits.RB14 = 1;
         }
-
+        // determines the speed of the lights
         if (speed == 0)
             for (i = 0; i < 200000; i++);
         else
             for (i = 0; i < 64000; i++);
-
+        // turn of the lights and exit from the program 
         if (PORTBbits.RB9) { // RB9 (SW7)
             PORTA = 0;
             break;
         }
-
+        //stops the lights in current state
         if (PORTBbits.RB11) { // RB11 (SW5)
             continue;
         }
+        // changes the speed of the lights
         if (PORTDbits.RD14) { // RD14 (SW4)
-            speed = 1;
+            speed = 1; //speed up the lights
         } else {
             speed = 0;
         }
-
+        //reverses the direction of the lights
         if (PORTDbits.RD15) { // RD15 (SW3)
-            if (last == 0)
+            if (last == 0)// when SW0 is on
                 func_SW0(-1);
-            if (last == 1)
+            if (last == 1)// when SW1 is on
                 func_SW1(&j, -1);
-            if (last == 2) {
+            if (last == 2) {// when SW2 is on
                 func_SW2(&x, &y, -1);
             }
 
             continue;
         }
 
-        if (PORTFbits.RF3) { // RF3 (SW0) configured as input 
+        //LED lights moves from left to right
+        if (PORTFbits.RF3) { // RF3 (SW0)  
             last = 0;
             func_SW0(last);
             continue;
         }
+
+        //LEDs light from left to right
         if (PORTFbits.RF5) { // RF5 (SW1)
             last = 1;
             func_SW1(&j, last);
             continue;
 
         }
+        //LED lights moves in opposite ways
         if (PORTFbits.RF4) { // RF4 (SW2)
             last = 2;
             func_SW2(&x, &y, last);
